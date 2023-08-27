@@ -2,8 +2,15 @@ use std::collections::HashMap;
 use std::fs;
 
 use clap::{Parser, Subcommand};
+use regex::Regex;
 
-const DEFAULT_WEB_URLS_FILE_NAME: &str = "web-search-urls";
+const SPIDER_ENV_VARIABLE: &str = "SPIDER_FILE";
+const DEFAULT_SPIDER_FILE_PATH: &str = "web-search-urls.spider";
+
+fn get_spider_file(name: &str) -> String {
+    let default_file_path = DEFAULT_SPIDER_FILE_PATH.to_string();
+    std::env::var(name).unwrap_or(default_file_path)
+}
 
 /// A struct wrapper for the web search url.
 struct URL {
@@ -18,6 +25,13 @@ impl URL {
 
     fn format(&self, query: &str) -> String {
         format!("{}{}", self.path, query)
+    }
+
+    fn main_page(&self) -> &str {
+        let pattern = r"^(https?://[^/]+/)";
+        let regex = Regex::new(pattern).unwrap();
+
+        regex.find(&self.path).unwrap().as_str()
     }
 }
 
@@ -82,7 +96,7 @@ enum Commands {
         web_site_name: String,
         /// The search term
         #[arg(value_parser = clap::builder::NonEmptyStringValueParser::new())]
-        search_term: String,
+        search_term: Option<String>,
     },
 }
 
@@ -102,12 +116,15 @@ fn main() {
             search_term,
         } => {
             let web_search_urls = WebSearchURLs::new()
-                .read_urls_file(DEFAULT_WEB_URLS_FILE_NAME)
+                .read_urls_file(&get_spider_file(SPIDER_ENV_VARIABLE))
                 .split_and_flesh_out();
 
             let url = web_search_urls.get(&web_site_name).unwrap();
 
-            open_url(&url.format(&search_term));
+            match search_term {
+                None => open_url(&url.main_page()),
+                Some(search_term) => open_url(&url.format(&search_term)),
+            }
         }
     }
 }
