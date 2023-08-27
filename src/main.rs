@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::fs;
 
 use clap::{Parser, Subcommand};
+use regex::Regex;
 
 const DEFAULT_WEB_URLS_FILE_NAME: &str = "web-search-urls";
 
@@ -18,6 +19,13 @@ impl URL {
 
     fn format(&self, query: &str) -> String {
         format!("{}{}", self.path, query)
+    }
+
+    fn main_page(&self) -> &str {
+        let pattern = r"^(https?://[^/]+/)";
+        let regex = Regex::new(pattern).unwrap();
+
+        regex.find(&self.path).unwrap().as_str()
     }
 }
 
@@ -82,7 +90,7 @@ enum Commands {
         web_site_name: String,
         /// The search term
         #[arg(value_parser = clap::builder::NonEmptyStringValueParser::new())]
-        search_term: String,
+        search_term: Option<String>,
     },
 }
 
@@ -107,7 +115,10 @@ fn main() {
 
             let url = web_search_urls.get(&web_site_name).unwrap();
 
-            open_url(&url.format(&search_term));
+            match search_term {
+                None => open_url(&url.main_page()),
+                Some(search_term) => open_url(&url.format(&search_term)),
+            }
         }
     }
 }
