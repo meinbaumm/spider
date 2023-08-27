@@ -1,0 +1,11 @@
+[package]
+name = "spider"
+authors = ["Maxim Petrenko <meinbaumm@gmail.com>"]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "A tool for web search on your favorite sites."
+
+[dependencies]
+clap = { version = "4.3.21", features = ["derive"] }
+open = "5.0.0"
