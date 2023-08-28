@@ -1,6 +1,7 @@
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
+#[command(name = "spider")]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
 struct Cli {
@@ -28,6 +29,6 @@ fn main() {
         Commands::Web {
             web_site_name,
             search_term,
-        } => spider::web_search(&web_site_name, &search_term),
+        } => spider_web_search::web_search(&web_site_name, &search_term),
     }
 }

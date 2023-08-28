@@ -1,5 +1,5 @@
 [package]
-name = "spider"
+name = "spider-web-search"
 authors = ["Maxim Petrenko <meinbaumm@gmail.com>"]
 version = "0.1.0"
 edition = "2021"
@@ -14,4 +14,3 @@ repository = "https://github.com/meinbaumm/spider.git"
 clap = { version = "4.3.21", features = ["derive"] }
 open = "5.0.0"
 regex = "1.9"
-
