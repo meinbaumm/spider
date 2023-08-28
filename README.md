@@ -1,5 +1,7 @@
 # Spider
 
+[![Crates info](https://img.shields.io/crates/v/spider-web-search.svg)](https://crates.io/crates/spider-web-search)
+
 Spider is a tool for web search on your favorite sites.
 
 The idea is pretty simple: quick web search.
