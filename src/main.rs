@@ -107,6 +107,29 @@ fn open_url(url: &str) {
     }
 }
 
+fn web_search(web_site_name: &str, search_term: &Option<String>) {
+    let web_search_urls = WebSearchURLs::new()
+        .read_urls_file(&get_spider_file(SPIDER_ENV_VARIABLE))
+        .split_and_flesh_out();
+
+    let url = {
+        let url = web_search_urls.get(&web_site_name);
+
+        match url {
+            Some(url) => url,
+            None => {
+                println!("Unknown website '{}'.", web_site_name);
+                return;
+            }
+        }
+    };
+
+    match search_term {
+        Some(search_term) => open_url(&url.format(&search_term)),
+        None => open_url(&url.main_page()),
+    }
+}
+
 fn main() {
     let spider = Cli::parse();
 
@@ -114,27 +137,6 @@ fn main() {
         Commands::Web {
             web_site_name,
             search_term,
-        } => {
-            let web_search_urls = WebSearchURLs::new()
-                .read_urls_file(&get_spider_file(SPIDER_ENV_VARIABLE))
-                .split_and_flesh_out();
-
-            let url = {
-                let url = web_search_urls.get(&web_site_name);
-
-                match url {
-                    Some(url) => url,
-                    None => {
-                        println!("Unknown website '{}'.", web_site_name);
-                        return;
-                    },
-                }
-            };
-
-            match search_term {
-                None => open_url(&url.main_page()),
-                Some(search_term) => open_url(&url.format(&search_term)),
-            }
-        }
+        } => web_search(&web_site_name, &search_term),
     }
 }
