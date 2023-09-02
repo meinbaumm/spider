@@ -80,7 +80,7 @@ impl WebSearchURLs {
 
 fn open_url(url: &str) {
     match open::that(url) {
-        Ok(()) => println!("Opened '{}' successfully.", url),
+        Ok(()) => println!("Opened '{}'.", url),
         Err(err) => panic!("An error occurred when opening '{}': {}", url, err),
     }
 }

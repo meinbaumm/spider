@@ -4,6 +4,7 @@ use clap::{Parser, Subcommand};
 #[command(name = "spider")]
 #[command(author, version, about, long_about = None)]
 #[command(propagate_version = true)]
+
 struct Cli {
     #[command(subcommand)]
     command: Commands,
