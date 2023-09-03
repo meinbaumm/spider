@@ -21,6 +21,8 @@ enum Commands {
         #[arg(value_parser = clap::builder::NonEmptyStringValueParser::new())]
         search_term: Option<String>,
     },
+    /// List the web sites in the spider file
+    List {},
 }
 
 fn main() {
@@ -31,5 +33,7 @@ fn main() {
             web_site_name,
             search_term,
         } => spider_web_search::web_search(&web_site_name, &search_term),
+
+        Commands::List {} => spider_web_search::list_web_search_urls(),
     }
 }

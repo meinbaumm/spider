@@ -85,10 +85,14 @@ fn open_url(url: &str) {
     }
 }
 
-pub fn web_search(web_site_name: &str, search_term: &Option<String>) {
-    let web_search_urls = WebSearchURLs::new()
+fn read_spider_file() -> WebSearchURLs {
+    WebSearchURLs::new()
         .read_urls_file(&get_spider_file(SPIDER_ENV_VARIABLE))
-        .split_and_flesh_out();
+        .split_and_flesh_out()
+}
+
+pub fn web_search(web_site_name: &str, search_term: &Option<String>) {
+    let web_search_urls = read_spider_file();
 
     let url = {
         let url = web_search_urls.get(&web_site_name);
@@ -106,4 +110,19 @@ pub fn web_search(web_site_name: &str, search_term: &Option<String>) {
         Some(search_term) => open_url(&url.format(&search_term)),
         None => open_url(&url.main_page()),
     }
+}
+
+pub fn list_web_search_urls() {
+    let web_search_urls = read_spider_file();
+
+    let max_len = web_search_urls
+        .urls
+        .iter()
+        .map(|(name, _)| name.len())
+        .max()
+        .unwrap();
+
+    web_search_urls.urls.iter().for_each(|(name, url)| {
+        println!("{:width$} {}", name, url.main_page(), width = max_len + 1)
+    });
 }
