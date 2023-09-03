@@ -1,7 +1,7 @@
 [package]
 name = "spider-web-search"
 authors = ["Maxim Petrenko <meinbaumm@gmail.com>"]
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 license = "MIT"
 description = "A tool for web search on your favorite sites."
