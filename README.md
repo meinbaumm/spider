@@ -29,10 +29,13 @@ urban           https://www.urbandictionary.com/define.php?term=
 And then you can use spider.
 
 ```bash
+A tool for web search on your favorite sites.
+
 Usage: spider-web-search <COMMAND>
 
 Commands:
   web   Search on the web
+  list  List web sites in the spider file
   help  Print this message or the help of the given subcommand(s)
 
 Options:
@@ -64,6 +67,12 @@ If you want to open main page of website instead of long url for search, just do
 
 ```bash
 spider-web-search web urban
+```
+
+Show your web urls provided in `web-search-urls.spider` file
+
+```bash
+spider-web-search list
 ```
 
 ## How To
